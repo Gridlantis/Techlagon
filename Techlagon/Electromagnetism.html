@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electromagnetic Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        select, input, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ffe9;
+            border: 1px solid #8bc34a;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Electromagnetic Solver</h1>
+        <label for="equation">Choose an equation to solve:</label>
+        <select id="equation">
+            <option value="coulombs">Coulomb's Law</option>
+            <option value="lorentz">Lorentz Force</option>
+            <option value="electricField">Electric Field</option>
+            <option value="electricPotential">Electric Potential</option>
+            <option value="capacitance">Capacitance</option>
+            <option value="capacitorEnergy">Energy Stored in a Capacitor</option>
+            <option value="magneticForce">Magnetic Force</option>
+            <option value="wireForce">Force on Current-Carrying Wire</option>
+            <option value="solenoid">Magnetic Field in Solenoid</option>
+        </select>
+
+        <div id="inputs"></div>
+
+        <button onclick="solveEquation()">Calculate</button>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const inputsDiv = document.getElementById('inputs');
+        const resultDiv = document.getElementById('result');
+
+        const equations = {
+            coulombs: {
+                description: "Coulomb's Law",
+                inputs: ["q1 (C)", "q2 (C)", "r (m)", "k (default: 8.987e9)"],
+                formula: (q1, q2, r, k = 8.987e9) => k * Math.abs(q1 * q2) / (r ** 2)
+            },
+            lorentz: {
+                description: "Lorentz Force",
+                inputs: ["q (C)", "E (N/C)", "v (m/s)", "B (T)", "Angle (θ, degrees)"],
+                formula: (q, E, v, B, theta) => q * E + q * v * B * Math.sin(theta * Math.PI / 180)
+            },
+            electricField: {
+                description: "Electric Field",
+                inputs: ["F (N)", "q (C)"],
+                formula: (F, q) => F / q
+            },
+            electricPotential: {
+                description: "Electric Potential",
+                inputs: ["q (C)", "r (m)", "k (default: 8.987e9)"],
+                formula: (q, r, k = 8.987e9) => k * Math.abs(q) / r
+            },
+            capacitance: {
+                description: "Capacitance",
+                inputs: ["Q (C)", "V (V)"],
+                formula: (Q, V) => Q / V
+            },
+            capacitorEnergy: {
+                description: "Energy Stored in a Capacitor",
+                inputs: ["C (F)", "V (V)"],
+                formula: (C, V) => 0.5 * C * V ** 2
+            },
+            magneticForce: {
+                description: "Magnetic Force on a Moving Charge",
+                inputs: ["q (C)", "v (m/s)", "B (T)", "Angle (θ, degrees)"],
+                formula: (q, v, B, theta) => q * v * B * Math.sin(theta * Math.PI / 180)
+            },
+            wireForce: {
+                description: "Force on Current-Carrying Wire",
+                inputs: ["I (A)", "L (m)", "B (T)", "Angle (θ, degrees)"],
+                formula: (I, L, B, theta) => I * L * B * Math.sin(theta * Math.PI / 180)
+            },
+            solenoid: {
+                description: "Magnetic Field inside a Solenoid",
+                inputs: ["n (turns/m)", "I (A)", "μ₀ (default: 4π × 1e-7)"],
+                formula: (n, I, mu0 = 4 * Math.PI * 1e-7) => mu0 * n * I
+            }
+        };
+
+        document.getElementById('equation').addEventListener('change', updateInputs);
+
+        function updateInputs() {
+            const selected = document.getElementById('equation').value;
+            const equation = equations[selected];
+            inputsDiv.innerHTML = '';
+            resultDiv.style.display = 'none';
+
+            equation.inputs.forEach(label => {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.placeholder = label;
+                input.dataset.label = label;
+                inputsDiv.appendChild(input);
+            });
+        }
+
+        function solveEquation() {
+            const selected = document.getElementById('equation').value;
+            const equation = equations[selected];
+            const inputs = Array.from(inputsDiv.querySelectorAll('input')).map(input => parseFloat(input.value) || 0);
+
+            try {
+                const result = equation.formula(...inputs);
+                resultDiv.textContent = `${equation.description} Result: ${result.toFixed(4)}`;
+                resultDiv.style.display = 'block';
+            } catch (err) {
+                resultDiv.textContent = 'Error: Please check your input values.';
+                resultDiv.style.display = 'block';
+            }
+        }
+
+        // Initialize default inputs
+        updateInputs();
+    </script>
+</body>
+</html>

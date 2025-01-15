@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculus Solver</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      color: white;
+      background-color: black;
+    }
+    header, footer {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      background: linear-gradient(90deg, #8858ff, #0500ff);
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      color: black;
+    }
+    pre {
+      background: #333;
+      padding: 10px;
+      border: 1px solid #555;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Techlagon</h1>
+</header>
+<div class="container">
+  <h1>Calculus Solver</h1>
+  <label for="function">Enter your function (e.g., x^2, sin(x), e^x):</label>
+  <input type="text" id="function" placeholder="e.g., x^2 + 3*x + 2">
+
+  <label for="operation">Choose an operation:</label>
+  <select id="operation">
+    <option value="derivative">Derivative</option>
+    <option value="integral">Integral</option>
+  </select>
+
+  <label for="variable">Variable (default is 'x'):</label>
+  <input type="text" id="variable" value="x">
+
+  <button onclick="calculate()">Solve</button>
+
+  <h2>Result:</h2>
+  <pre id="result">Result will appear here.</pre>
+</div>
+<footer>
+  <p>&copy; 2025 Gridlantis. All rights reserved.</p>
+</footer>
+<script>
+  function calculate() {
+    const funcInput = document.getElementById('function').value;
+    const operation = document.getElementById('operation').value;
+    const variable = document.getElementById('variable').value || 'x';
+
+    try {
+      if (!funcInput.trim()) {
+        throw new Error('Please enter a valid function.');
+      }
+
+      const parsedFunction = math.parse(funcInput);
+      let result;
+
+      if (operation === 'derivative') {
+        result = math.derivative(parsedFunction, variable).toString();
+      } else if (operation === 'integral') {
+        result = math.integral(parsedFunction, variable).toString();
+      }
+
+      document.getElementById('result').textContent = result;
+    } catch (error) {
+      document.getElementById('result').textContent = `Error: ${error.message}`;
+    }
+  }
+</script>
+</body>
+</html>

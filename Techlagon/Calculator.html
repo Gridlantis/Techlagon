@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .calculator-container {
+            text-align: center;
+        }
+        .calculator, .graphing-calculator {
+            width: 260px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .calculator.active, .graphing-calculator.active {
+            display: block;
+        }
+        .display {
+            width: 100%;
+            height: 50px;
+            background-color: #222;
+            color: white;
+            text-align: right;
+            font-size: 2rem;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .button {
+            padding: 20px;
+            font-size: 1.5rem;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #e0e0e0;
+        }
+        .button:active {
+            background-color: #d0d0d0;
+        }
+        .button.operation {
+            background-color: #ff9800;
+            color: white;
+        }
+        .button.operation:hover {
+            background-color: #fb8c00;
+        }
+        .button.equal {
+            background-color: #4caf50;
+            color: white;
+            grid-column: span 2;
+        }
+        .button.equal:hover {
+            background-color: #388e3c;
+        }
+        .button.clear {
+            background-color: #f44336;
+            color: white;
+            grid-column: span 2;
+        }
+        .button.clear:hover {
+            background-color: #d32f2f;
+        }
+        .button.backspace {
+            background-color: #607d8b;
+            color: white;
+        }
+        .button.backspace:hover {
+            background-color: #455a64;
+        }
+        .toggle-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-button:hover {
+            background-color: #1976d2;
+        }
+        .home-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .home-button:hover {
+            background-color: #e64a19;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <div class="calculator active" id="simpleCalculator">
+            <input type="text" id="display" class="display" disabled aria-label="Calculator display">
+            <div class="buttons">
+                <button class="button clear" onclick="clearDisplay()">C</button>
+                <button class="button backspace" onclick="backspace()" aria-label="Backspace">&larr;</button>
+                <button class="button operation" onclick="appendToDisplay('/')">/</button>
+                <button class="button operation" onclick="appendToDisplay('*')">*</button>
+                <button class="button" onclick="appendToDisplay('7')">7</button>
+                <button class="button" onclick="appendToDisplay('8')">8</button>
+                <button class="button" onclick="appendToDisplay('9')">9</button>
+                <button class="button operation" onclick="appendToDisplay('-')">-</button>
+                <button class="button" onclick="appendToDisplay('4')">4</button>
+                <button class="button" onclick="appendToDisplay('5')">5</button>
+                <button class="button" onclick="appendToDisplay('6')">6</button>
+                <button class="button operation" onclick="appendToDisplay('+')">+</button>
+                <button class="button" onclick="appendToDisplay('1')">1</button>
+                <button class="button" onclick="appendToDisplay('2')">2</button>
+                <button class="button" onclick="appendToDisplay('3')">3</button>
+                <button class="button" onclick="appendToDisplay('0')">0</button>
+                <button class="button" onclick="appendToDisplay('.')">.</button>
+                <button class="button equal" onclick="calculateResult()">=</button>
+            </div>
+        </div>
+
+        <div class="graphing-calculator" id="graphingCalculator">
+            <input type="text" id="functionInput" class="display" placeholder="Enter function e.g., x^2" aria-label="Function input">
+            <canvas id="graphCanvas"></canvas>
+            <p class="error-message" id="errorMessage"></p>
+        </div>
+
+        <button class="toggle-button" onclick="toggleCalculator(event)">Switch to Graphing Calculator</button>
+        <button class="home-button" onclick="location.href='index.html'">Home</button>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const simpleCalculator = document.getElementById('simpleCalculator');
+        const graphingCalculator = document.getElementById('graphingCalculator');
+        const graphCanvas = document.getElementById('graphCanvas');
+        const ctx = graphCanvas.getContext('2d');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function appendToDisplay(value) {
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function backspace() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function calculateResult() {
+            try {
+                const safeResult = Function('"use strict"; return (' + display.value + ')')();
+                display.value = safeResult;
+            } catch (e) {
+                display.value = 'Error';
+            }
+        }
+
+        function toggleCalculator(event) {
+            if (simpleCalculator.classList.contains('active')) {
+                simpleCalculator.classList.remove('active');
+                graphingCalculator.classList.add('active');
+                event.target.textContent = 'Switch to Simple Calculator';
+            } else {
+                graphingCalculator.classList.remove('active');
+                simpleCalculator.classList.add('active');
+                event.target.textContent = 'Switch to Graphing Calculator';
+            }
+        }
+
+        function plotGraph() {
+            const functionInput = document.getElementById('functionInput').value;
+            ctx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+            errorMessage.textContent = '';
+            try {
+                const parsedFunction = new Function('x', `return ${functionInput.replace('^', '**')}`);
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'blue';
+                ctx.lineWidth = 2;
+
+                for (let x = -10; x <= 10; x += 0.1) {
+                    const y = parsedFunction(x);
+                    if (!isFinite(y)) continue; // Skip undefined or infinite values
+
+                    const canvasX = (x + 10) * (graphCanvas.width / 20);
+                    const canvasY = graphCanvas.height - (y + 10) * (graphCanvas.height / 20);
+                    if (x === -10) {
+                        ctx.moveTo(canvasX, canvasY);
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+
+                ctx.stroke();
+            } catch (e) {
+                errorMessage.textContent = 'Invalid function! Please check your input.';
+            }
+        }
+
+        document.getElementById('functionInput').addEventListener('input', plotGraph);
+    </script>
+
+</body>
+</html>

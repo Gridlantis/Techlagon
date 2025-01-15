@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermodynamics Equation Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+            width: 100%;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            font-weight: bold;
+            color: #27ae60;
+        }
+    </style>
+    <script>
+        function updateInputs() {
+            const equation = document.getElementById('equation').value;
+            const inputContainer = document.getElementById('inputs');
+            inputContainer.innerHTML = '';
+
+            let inputFields = '';
+
+            switch (equation) {
+                case 'first-law':
+                    inputFields = `
+                        <label for="q">Heat added to the system (q):</label>
+                        <input type="number" id="q" class="input-field" data-name="q" step="any">
+                        <label for="w">Work done on the system (w):</label>
+                        <input type="number" id="w" class="input-field" data-name="w" step="any">
+                    `;
+                    break;
+                case 'enthalpy':
+                    inputFields = `
+                        <label for="U">Internal Energy (U):</label>
+                        <input type="number" id="U" class="input-field" data-name="U" step="any">
+                        <label for="P">Pressure (P):</label>
+                        <input type="number" id="P" class="input-field" data-name="P" step="any">
+                        <label for="V">Volume (V):</label>
+                        <input type="number" id="V" class="input-field" data-name="V" step="any">
+                    `;
+                    break;
+                case 'gibbs':
+                    inputFields = `
+                        <label for="H">Enthalpy (H):</label>
+                        <input type="number" id="H" class="input-field" data-name="H" step="any">
+                        <label for="T">Temperature (T):</label>
+                        <input type="number" id="T" class="input-field" data-name="T" step="any">
+                        <label for="S">Entropy (S):</label>
+                        <input type="number" id="S" class="input-field" data-name="S" step="any">
+                    `;
+                    break;
+                case 'heat-capacity':
+                    inputFields = `
+                        <label for="m">Mass (m):</label>
+                        <input type="number" id="m" class="input-field" data-name="m" step="any">
+                        <label for="c">Specific Heat Capacity (c):</label>
+                        <input type="number" id="c" class="input-field" data-name="c" step="any">
+                        <label for="deltaT">Change in Temperature (ΔT):</label>
+                        <input type="number" id="deltaT" class="input-field" data-name="deltaT" step="any">
+                    `;
+                    break;
+                case 'ideal-gas':
+                    inputFields = `
+                        <label for="n">Number of Moles (n):</label>
+                        <input type="number" id="n" class="input-field" data-name="n" step="any">
+                        <label for="R">Ideal Gas Constant (R):</label>
+                        <input type="number" id="R" class="input-field" data-name="R" step="any">
+                        <label for="T">Temperature (T):</label>
+                        <input type="number" id="T" class="input-field" data-name="T" step="any">
+                        <label for="P">Pressure (P):</label>
+                        <input type="number" id="P" class="input-field" data-name="P" step="any">
+                    `;
+                    break;
+            }
+
+            inputContainer.innerHTML = inputFields;
+        }
+
+        function calculateEquation() {
+            const equation = document.getElementById('equation').value;
+            const inputs = document.querySelectorAll('.input-field');
+            let values = {};
+
+            inputs.forEach(input => {
+                const name = input.getAttribute('data-name');
+                values[name] = parseFloat(input.value);
+            });
+
+            let result = '';
+
+            try {
+                switch (equation) {
+                    case 'first-law':
+                        result = `ΔU = ${values.q + values.w}`;
+                        break;
+                    case 'enthalpy':
+                        result = `H = ${values.U + values.P * values.V}`;
+                        break;
+                    case 'gibbs':
+                        result = `G = ${values.H - values.T * values.S}`;
+                        break;
+                    case 'heat-capacity':
+                        result = `q = ${values.m * values.c * values.deltaT}`;
+                        break;
+                    case 'ideal-gas':
+                        result = `PV = ${values.n * values.R * values.T}`;
+                        break;
+                    default:
+                        result = 'Please select a valid equation.';
+                }
+            } catch (error) {
+                result = 'Error: Please ensure all fields are filled out correctly.';
+            }
+
+            document.getElementById('result').textContent = result;
+        }
+    </script>
+</head>
+<body>
+    <h1>Thermodynamics Equation Solver</h1>
+    <div class="container">
+        <label for="equation">Select an Equation:</label>
+        <select id="equation" onchange="updateInputs()">
+            <option value="">-- Select --</option>
+            <option value="first-law">First Law of Thermodynamics (ΔU = q + w)</option>
+            <option value="enthalpy">Enthalpy (H = U + PV)</option>
+            <option value="gibbs">Gibbs Free Energy (G = H - TS)</option>
+            <option value="heat-capacity">Heat Capacity (q = mcΔT)</option>
+            <option value="ideal-gas">Ideal Gas Law (PV = nRT)</option>
+        </select>
+    </div>
+    <div class="container" id="inputs">
+        <!-- Dynamic input fields will be inserted here -->
+    </div>
+    <button onclick="calculateEquation()">Calculate</button>
+    <p class="result" id="result"></p>
+</body>
+</html>

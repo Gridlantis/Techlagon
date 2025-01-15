@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Equation Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        select, input, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Equation Helper</h1>
+        <label for="equation">Select an Equation:</label>
+        <select id="equation">
+            <option value="e_mc2">Mass-Energy Equivalence (E=mc²)</option>
+            <option value="time_dilation">Time Dilation (t' = t / sqrt(1 - v²/c²))</option>
+            <option value="de_broglie">De Broglie Wavelength (λ = h/p)</option>
+        </select>
+
+        <div id="inputs">
+            <!-- Inputs will be dynamically inserted here -->
+        </div>
+
+        <button id="calculate">Calculate</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const c = 299792458; // Speed of light (m/s)
+        const h = 6.62607015e-34; // Planck's constant (J·s)
+
+        const inputsDiv = document.getElementById("inputs");
+        const resultDiv = document.getElementById("result");
+        const equationSelect = document.getElementById("equation");
+
+        // Define the inputs for each equation
+        const equationInputs = {
+            e_mc2: [
+                { id: "mass", label: "Mass (kg)", type: "number" }
+            ],
+            time_dilation: [
+                { id: "time", label: "Stationary Time (s)", type: "number" },
+                { id: "velocity", label: "Velocity (m/s)", type: "number" }
+            ],
+            de_broglie: [
+                { id: "momentum", label: "Momentum (kg·m/s)", type: "number" }
+            ]
+        };
+
+        // Function to display inputs for the selected equation
+        function updateInputs() {
+            const selectedEquation = equationSelect.value;
+            inputsDiv.innerHTML = ""; // Clear previous inputs
+
+            equationInputs[selectedEquation].forEach(input => {
+                const label = document.createElement("label");
+                label.textContent = input.label;
+                label.setAttribute("for", input.id);
+
+                const inputField = document.createElement("input");
+                inputField.type = input.type;
+                inputField.id = input.id;
+
+                inputsDiv.appendChild(label);
+                inputsDiv.appendChild(inputField);
+            });
+        }
+
+        // Function to calculate results
+        function calculate() {
+            const selectedEquation = equationSelect.value;
+            let result;
+
+            try {
+                if (selectedEquation === "e_mc2") {
+                    const mass = parseFloat(document.getElementById("mass").value);
+                    result = `Energy = ${mass * c * c} J`;
+                } else if (selectedEquation === "time_dilation") {
+                    const time = parseFloat(document.getElementById("time").value);
+                    const velocity = parseFloat(document.getElementById("velocity").value);
+                    if (velocity >= c) throw "Velocity cannot exceed the speed of light.";
+                    const timeDilation = time / Math.sqrt(1 - (velocity * velocity) / (c * c));
+                    result = `Moving clock's time = ${timeDilation} s`;
+                } else if (selectedEquation === "de_broglie") {
+                    const momentum = parseFloat(document.getElementById("momentum").value);
+                    result = `Wavelength = ${h / momentum} m`;
+                } else {
+                    result = "Equation not implemented yet.";
+                }
+            } catch (error) {
+                result = `Error: ${error}`;
+            }
+
+            resultDiv.textContent = result;
+        }
+
+        // Event listeners
+        equationSelect.addEventListener("change", updateInputs);
+        document.getElementById("calculate").addEventListener("click", calculate);
+
+        // Initialize the inputs
+        updateInputs();
+    </script>
+</body>
+</html>

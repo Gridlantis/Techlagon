@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: black;
+            color: white;
+        }
+        .container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #222;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 5px 10px;
+            background: linear-gradient(45deg, #8858ff, #0500ff);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #0500ff, #8858ff);
+        }
+    </style>
+</head>
+<body>
+    <h1>Equation Solver</h1>
+
+    <!-- Stress and Strain -->
+    <div class="container">
+        <h2>Stress and Strain</h2>
+        <label>Force (F): <input type="number" id="force" step="any"></label>
+        <label>Area (A): <input type="number" id="area" step="any"></label>
+        <button onclick="calculateStress()">Calculate Stress</button>
+        <p id="stressResult"></p>
+
+        <label>Change in Length (ΔL): <input type="number" id="deltaL" step="any"></label>
+        <label>Original Length (L₀): <input type="number" id="originalL" step="any"></label>
+        <button onclick="calculateStrain()">Calculate Strain</button>
+        <p id="strainResult"></p>
+
+        <label>Young's Modulus (E): <input type="number" id="youngsModulus" step="any"></label>
+        <label>Strain (ε): <input type="number" id="strain" step="any"></label>
+        <button onclick="calculateHookesLaw()">Apply Hooke's Law</button>
+        <p id="hookeResult"></p>
+    </div>
+
+    <!-- Fluid Flow -->
+    <div class="container">
+        <h2>Fluid Flow</h2>
+        <label>Hydraulic Conductivity (K): <input type="number" id="conductivity" step="any"></label>
+        <label>Cross-sectional Area (A): <input type="number" id="crossArea" step="any"></label>
+        <label>Hydraulic Gradient (dh/dl): <input type="number" id="gradient" step="any"></label>
+        <button onclick="calculateDarcy()">Calculate Darcy's Law</button>
+        <p id="darcyResult"></p>
+    </div>
+
+    <!-- Radioactive Decay -->
+    <div class="container">
+        <h2>Radioactive Decay</h2>
+        <label>Initial Amount (N₀): <input type="number" id="initialAmount" step="any"></label>
+        <label>Decay Constant (λ): <input type="number" id="decayConstant" step="any"></label>
+        <label>Time (t): <input type="number" id="time" step="any"></label>
+        <button onclick="calculateDecay()">Calculate Decay</button>
+        <p id="decayResult"></p>
+    </div>
+
+    <script>
+        function calculateStress() {
+            const force = parseFloat(document.getElementById('force').value);
+            const area = parseFloat(document.getElementById('area').value);
+            if (area !== 0) {
+                const stress = force / area;
+                document.getElementById('stressResult').textContent = `Stress (σ): ${stress.toFixed(2)} Pa`;
+            } else {
+                document.getElementById('stressResult').textContent = 'Area cannot be zero.';
+            }
+        }
+
+        function calculateStrain() {
+            const deltaL = parseFloat(document.getElementById('deltaL').value);
+            const originalL = parseFloat(document.getElementById('originalL').value);
+            if (originalL !== 0) {
+                const strain = deltaL / originalL;
+                document.getElementById('strainResult').textContent = `Strain (ε): ${strain.toFixed(2)}`;
+            } else {
+                document.getElementById('strainResult').textContent = 'Original length cannot be zero.';
+            }
+        }
+
+        function calculateHookesLaw() {
+            const E = parseFloat(document.getElementById('youngsModulus').value);
+            const strain = parseFloat(document.getElementById('strain').value);
+            const stress = E * strain;
+            document.getElementById('hookeResult').textContent = `Stress (σ): ${stress.toFixed(2)} Pa`;
+        }
+
+        function calculateDarcy() {
+            const K = parseFloat(document.getElementById('conductivity').value);
+            const A = parseFloat(document.getElementById('crossArea').value);
+            const gradient = parseFloat(document.getElementById('gradient').value);
+            const Q = -K * A * gradient;
+            document.getElementById('darcyResult').textContent = `Flow Rate (Q): ${Q.toFixed(2)} m³/s`;
+        }
+
+        function calculateDecay() {
+            const N0 = parseFloat(document.getElementById('initialAmount').value);
+            const lambda = parseFloat(document.getElementById('decayConstant').value);
+            const t = parseFloat(document.getElementById('time').value);
+            const Nt = N0 * Math.exp(-lambda * t);
+            document.getElementById('decayResult').textContent = `Remaining Amount (N(t)): ${Nt.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>

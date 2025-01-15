@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techlagon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: black;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(to right, #1c00fa, #ff1b1b);
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav {
+            background: linear-gradient(to right, #ff0000, #000000); /* Red to black gradient */
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #550000; /* Darker red hover effect */
+            color: #ffffff;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .section {
+            padding: 30px; /* Increased padding */
+            background: linear-gradient(40deg, #8858ff, #0500ff);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px; /* Increased font size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(136, 88, 255, 0.7);
+        }
+
+        footer {
+            background: linear-gradient(to right, #ff0000, #000000); /* Red to black gradient */
+            color: white;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #ffaaaa; /* Light red hover effect */
+            text-decoration: underline;
+        }
+
+        .emoji {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>Techlagon</header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Tools.html">Tools</a>
+        <a href="About.html">About</a>
+        <a href="More.html">More</a>
+    </nav>
+
+    <div class="container">
+        <div class="section" onclick="location.href='Calc.html';">
+            <span class="emoji">➗</span> Calculus
+        </div>
+        <div class="section" onclick="location.href='Geometry.html';">
+            <span class="emoji">📐</span> Geometry
+        </div>
+        <div class="section" onclick="location.href='Algebra.html';">
+            <span class="emoji">🧮</span> Algebra
+        </div>
+        <div class="section" onclick="location.href='Chem.html';">
+            <span class="emoji">⚗️</span> Chemistry
+        </div>
+        <div class="section" onclick="location.href='Phy.html';">
+            <span class="emoji">🔬</span> Physics
+        </div>
+        <div class="section" onclick="location.href='Astro.html';">
+            <span class="emoji">🌌</span> Astronomy 
+        </div>
+        <div class="section" onclick="location.href='Geo.html';">
+            <span class="emoji">🌍</span> Geology
+        </div>
+        <div class="section" onclick="location.href='Tools.html';">
+            <span class="emoji">🔧</span> Tools
+        </div>
+        <div class="section" onclick="location.href='Bio.html';">
+            <span class="emoji">🧬</span> Biology
+        </div>
+        <div class="section" onclick="location.href='Fitness.html';">
+            <span class="emoji">🏋️</span> Fitness
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Gridlantis. All rights reserved |
+        <a href="https://gridlantis.kit.com/8d8a4df79a">Subscribe</a> |
+        <a href="#">Contact Us</a>
+    </footer>
+</body>
+</html>

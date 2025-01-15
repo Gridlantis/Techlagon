@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: black;
+            color: white;
+        }
+        .container {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            padding: 5px;
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 10px;
+            cursor: pointer;
+            background: linear-gradient(to right, #8858ff, #0500ff);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Astronomy</h1>
+    
+    <!-- Newton's Law of Universal Gravitation -->
+    <div class="container">
+        <h2>Newton's Law of Universal Gravitation</h2>
+        <label for="mass1">Mass 1 (m1) in kg:</label>
+        <input type="number" id="mass1" step="any">
+
+        <label for="mass2">Mass 2 (m2) in kg:</label>
+        <input type="number" id="mass2" step="any">
+
+        <label for="distance">Distance (r) in meters:</label>
+        <input type="number" id="distance" step="any">
+
+        <button onclick="calculateGravitationalForce()">Calculate Gravitational Force</button>
+        <p class="result" id="gravForceResult"></p>
+    </div>
+
+    <!-- Kepler's Third Law -->
+    <div class="container">
+        <h2>Kepler's Third Law</h2>
+        <label for="semiMajorAxis">Semi-Major Axis (a) in AU:</label>
+        <input type="number" id="semiMajorAxis" step="any">
+
+        <label for="orbitalPeriod">Orbital Period (p) in years:</label>
+        <input type="number" id="orbitalPeriod" step="any">
+
+        <button onclick="calculateKeplerLaw()">Calculate Proportionality</button>
+        <p class="result" id="keplerResult"></p>
+    </div>
+
+    <!-- Wien's Law -->
+    <div class="container">
+        <h2>Wien's Law</h2>
+        <label for="temperature">Temperature (T) in Kelvin:</label>
+        <input type="number" id="temperature" step="any">
+
+        <button onclick="calculateWienLaw()">Calculate Peak Wavelength</button>
+        <p class="result" id="wienResult"></p>
+    </div>
+
+    <script>
+        const G = 6.67430e-11; // Gravitational constant in m^3 kg^-1 s^-2
+
+        function calculateGravitationalForce() {
+            const m1 = parseFloat(document.getElementById('mass1').value);
+            const m2 = parseFloat(document.getElementById('mass2').value);
+            const r = parseFloat(document.getElementById('distance').value);
+
+            if (!m1 || !m2 || !r) {
+                alert('Please enter valid values for all fields.');
+                return;
+            }
+
+            const F = (G * m1 * m2) / (r * r);
+            document.getElementById('gravForceResult').innerText = `Gravitational Force: ${F.toExponential(2)} N`;
+        }
+
+        function calculateKeplerLaw() {
+            const a = parseFloat(document.getElementById('semiMajorAxis').value);
+            const p = parseFloat(document.getElementById('orbitalPeriod').value);
+
+            if (!a || !p) {
+                alert('Please enter valid values for both fields.');
+                return;
+            }
+
+            const proportionality = Math.pow(a, 3) / Math.pow(p, 2);
+            document.getElementById('keplerResult').innerText = `Proportionality Constant: ${proportionality.toFixed(2)}`;
+        }
+
+        function calculateWienLaw() {
+            const T = parseFloat(document.getElementById('temperature').value);
+
+            if (!T) {
+                alert('Please enter a valid temperature.');
+                return;
+            }
+
+            const peakWavelength = 2.9e-3 / T;
+            document.getElementById('wienResult').innerText = `Peak Wavelength: ${peakWavelength.toExponential(2)} m`;
+        }
+    </script>
+</body>
+</html>

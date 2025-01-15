@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #8858ff, #0500ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .todo-container {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .todo-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .todo-header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .todo-input {
+      width: calc(100% - 40px);
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .category-select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .todo-button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #8858ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .todo-button:hover {
+      background-color: #6e3edc;
+    }
+
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin: 5px 0;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .todo-item button {
+      background: none;
+      border: none;
+      color: #8858ff;
+      cursor: pointer;
+    }
+
+    .todo-item button:hover {
+      color: #6e3edc;
+    }
+
+    .category-switch {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .category-switch:hover {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-container">
+    <div class="todo-header">
+      <h1>To-Do List</h1>
+    </div>
+    <select id="category-select" class="category-select">
+      <option value="not-started">Not Started</option>
+      <option value="in-progress">In Progress</option>
+    </select>
+    <input type="text" id="todo-input" class="todo-input" placeholder="Add a new task...">
+    <button id="add-button" class="todo-button">Add Task</button>
+    <ul id="todo-list" class="todo-list"></ul>
+  </div>
+
+  <script>
+    const todoInput = document.getElementById('todo-input');
+    const addButton = document.getElementById('add-button');
+    const todoList = document.getElementById('todo-list');
+    const categorySelect = document.getElementById('category-select');
+
+    // Load saved tasks from localStorage
+    const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
+    function renderTodos() {
+      todoList.innerHTML = '';
+      savedTodos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        li.innerHTML = `
+          <span>${todo.task} (<span class="todo-category">${todo.category}</span>)</span>
+          <button onclick="deleteTask(${index})">&times;</button>
+          <span class="category-switch" onclick="switchCategory(${index})">Switch Category</span>
+        `;
+        todoList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const task = todoInput.value.trim();
+      const category = categorySelect.value;
+      if (task) {
+        savedTodos.push({ task, category });
+        localStorage.setItem('todos', JSON.stringify(savedTodos));
+        renderTodos();
+        todoInput.value = '';
+      }
+    }
+
+    function deleteTask(index) {
+      savedTodos.splice(index, 1);
+      localStorage.setItem('todos', JSON.stringify(savedTodos));
+      renderTodos();
+    }
+
+    function switchCategory(index) {
+      const currentCategory = savedTodos[index].category;
+      savedTodos[index].category = currentCategory === 'not-started' ? 'in-progress' : 'not-started';
+      localStorage.setItem('todos', JSON.stringify(savedTodos));
+      renderTodos();
+    }
+
+    addButton.addEventListener('click', addTask);
+
+    todoInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        addTask();
+      }
+    });
+
+    // Initial render
+    renderTodos();
+  </script>
+</body>
+</html>

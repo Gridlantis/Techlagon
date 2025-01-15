@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Equation Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text for contrast */
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input {
+            width: 60%;
+            border: 2px solid #8858ff;
+            border-radius: 5px;
+            background-color: #222;
+            color: #fff;
+        }
+        button {
+            background: linear-gradient(45deg, #8858ff, #0500ff); /* Gradient */
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+        button:active {
+            transform: scale(0.95); /* Slight shrink effect on click */
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chemical Equation Solver</h1>
+    <p>Enter a chemical equation to solve:</p>
+    <input type="text" id="equation" placeholder="Example: H2 + O2 -> H2O">
+    <button onclick="solveEquation()">Solve</button>
+    <div id="output"></div>
+
+    <script>
+        function solveEquation() {
+            const input = document.getElementById("equation").value.trim();
+            const output = document.getElementById("output");
+            
+            if (!input) {
+                output.innerHTML = "<p>Please enter an equation.</p>";
+                return;
+            }
+
+            try {
+                const result = balanceEquation(input);
+                const reactionType = classifyReaction(input);
+                output.innerHTML = `
+                    <p><strong>Balanced Equation:</strong> ${result}</p>
+                    <p><strong>Reaction Type:</strong> ${reactionType}</p>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        function balanceEquation(equation) {
+            // Placeholder: Balancing logic requires advanced algorithms (not implemented here)
+            return "Balancing not implemented yet. (e.g., H2 + O2 -> H2O balanced as 2H2 + O2 -> 2H2O)";
+        }
+
+        function classifyReaction(equation) {
+            const patterns = {
+                synthesis: /.+\+.+->.+/,
+                decomposition: /.+->.+\+.+/,
+                singleReplacement: /.+\+.+->.+\+.+/,
+                doubleReplacement: /.+\+.+->.+\+.+/,
+                combustion: /C.+H.+\+O2->.+/,
+                acidBase: /.+H.+\+.+OH->.+H2O.*/
+            };
+
+            for (const [type, regex] of Object.entries(patterns)) {
+                if (regex.test(equation)) return type.replace(/([A-Z])/g, ' $1').trim();
+            }
+
+            return "Unknown Reaction Type";
+        }
+    </script>
+</body>
+</html>

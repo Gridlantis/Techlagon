@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Formula Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .formula {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Formula Solver</h1>
+
+        <!-- Kinematics -->
+        <div class="formula">
+            <h2>Kinematics (v = u + at)</h2>
+            <label for="u">Initial Velocity (u):</label>
+            <input type="number" id="u" placeholder="m/s">
+
+            <label for="a">Acceleration (a):</label>
+            <input type="number" id="a" placeholder="m/s²">
+
+            <label for="t">Time (t):</label>
+            <input type="number" id="t" placeholder="s">
+
+            <button onclick="solveKinematics()">Solve</button>
+            <div class="result" id="kinematicsResult"></div>
+        </div>
+
+        <!-- Dynamics -->
+        <div class="formula">
+            <h2>Dynamics (F = ma)</h2>
+            <label for="mass">Mass (m):</label>
+            <input type="number" id="mass" placeholder="kg">
+
+            <label for="acceleration">Acceleration (a):</label>
+            <input type="number" id="acceleration" placeholder="m/s²">
+
+            <button onclick="solveDynamics()">Solve</button>
+            <div class="result" id="dynamicsResult"></div>
+        </div>
+
+        <!-- Energy -->
+        <div class="formula">
+            <h2>Kinetic Energy (KE = 1/2 mv²)</h2>
+            <label for="energyMass">Mass (m):</label>
+            <input type="number" id="energyMass" placeholder="kg">
+
+            <label for="velocity">Velocity (v):</label>
+            <input type="number" id="velocity" placeholder="m/s">
+
+            <button onclick="solveEnergy()">Solve</button>
+            <div class="result" id="energyResult"></div>
+        </div>
+
+        <!-- Momentum -->
+        <div class="formula">
+            <h2>Momentum (p = mv)</h2>
+            <label for="momentumMass">Mass (m):</label>
+            <input type="number" id="momentumMass" placeholder="kg">
+
+            <label for="momentumVelocity">Velocity (v):</label>
+            <input type="number" id="momentumVelocity" placeholder="m/s">
+
+            <button onclick="solveMomentum()">Solve</button>
+            <div class="result" id="momentumResult"></div>
+        </div>
+
+        <!-- Circular Motion -->
+        <div class="formula">
+            <h2>Circular Motion (F<sub>c</sub> = mv² / r)</h2>
+            <label for="circularMass">Mass (m):</label>
+            <input type="number" id="circularMass" placeholder="kg">
+
+            <label for="circularVelocity">Velocity (v):</label>
+            <input type="number" id="circularVelocity" placeholder="m/s">
+
+            <label for="radius">Radius (r):</label>
+            <input type="number" id="radius" placeholder="m">
+
+            <button onclick="solveCircularMotion()">Solve</button>
+            <div class="result" id="circularResult"></div>
+        </div>
+
+        <!-- Gravitational Force -->
+        <div class="formula">
+            <h2>Gravitational Force (F<sub>g</sub> = Gm<sub>1</sub>m<sub>2</sub> / r²)</h2>
+            <label for="mass1">Mass 1 (m<sub>1</sub>):</label>
+            <input type="number" id="mass1" placeholder="kg">
+
+            <label for="mass2">Mass 2 (m<sub>2</sub>):</label>
+            <input type="number" id="mass2" placeholder="kg">
+
+            <label for="distance">Distance (r):</label>
+            <input type="number" id="distance" placeholder="m">
+
+            <button onclick="solveGravitationalForce()">Solve</button>
+            <div class="result" id="gravityResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const G = 6.67430e-11; // Gravitational constant
+
+        function solveKinematics() {
+            const u = parseFloat(document.getElementById('u').value);
+            const a = parseFloat(document.getElementById('a').value);
+            const t = parseFloat(document.getElementById('t').value);
+            const v = u + a * t;
+            document.getElementById('kinematicsResult').innerText = `Final Velocity (v): ${v.toFixed(2)} m/s`;
+        }
+
+        function solveDynamics() {
+            const m = parseFloat(document.getElementById('mass').value);
+            const a = parseFloat(document.getElementById('acceleration').value);
+            const F = m * a;
+            document.getElementById('dynamicsResult').innerText = `Force (F): ${F.toFixed(2)} N`;
+        }
+
+        function solveEnergy() {
+            const m = parseFloat(document.getElementById('energyMass').value);
+            const v = parseFloat(document.getElementById('velocity').value);
+            const KE = 0.5 * m * v ** 2;
+            document.getElementById('energyResult').innerText = `Kinetic Energy (KE): ${KE.toFixed(2)} J`;
+        }
+
+        function solveMomentum() {
+            const m = parseFloat(document.getElementById('momentumMass').value);
+            const v = parseFloat(document.getElementById('momentumVelocity').value);
+            const p = m * v;
+            document.getElementById('momentumResult').innerText = `Momentum (p): ${p.toFixed(2)} kg·m/s`;
+        }
+
+        function solveCircularMotion() {
+            const m = parseFloat(document.getElementById('circularMass').value);
+            const v = parseFloat(document.getElementById('circularVelocity').value);
+            const r = parseFloat(document.getElementById('radius').value);
+            const Fc = (m * v ** 2) / r;
+            document.getElementById('circularResult').innerText = `Centripetal Force (F): ${Fc.toFixed(2)} N`;
+        }
+
+        function solveGravitationalForce() {
+            const m1 = parseFloat(document.getElementById('mass1').value);
+            const m2 = parseFloat(document.getElementById('mass2').value);
+            const r = parseFloat(document.getElementById('distance').value);
+            const Fg = G * (m1 * m2) / r ** 2;
+            document.getElementById('gravityResult').innerText = `Gravitational Force (F): ${Fg.toExponential(2)} N`;
+        }
+    </script>
+</body>
+</html>

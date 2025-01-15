@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra Equation Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Algebra Equation Solver</h1>
+        <label for="equation-type">Select Equation Type:</label>
+        <select id="equation-type">
+            <option value="linear">Linear Equation (ax + b = 0)</option>
+            <option value="quadratic">Quadratic Equation (ax² + bx + c = 0)</option>
+            <option value="polynomial">Polynomial Equation (ax³ + bx² + cx + d = 0)</option>
+        </select>
+
+        <div id="linear-inputs" class="inputs">
+            <label for="linear-a">a:</label>
+            <input type="number" id="linear-a" placeholder="Enter a">
+
+            <label for="linear-b">b:</label>
+            <input type="number" id="linear-b" placeholder="Enter b">
+        </div>
+
+        <div id="quadratic-inputs" class="inputs" style="display: none;">
+            <label for="quadratic-a">a:</label>
+            <input type="number" id="quadratic-a" placeholder="Enter a">
+
+            <label for="quadratic-b">b:</label>
+            <input type="number" id="quadratic-b" placeholder="Enter b">
+
+            <label for="quadratic-c">c:</label>
+            <input type="number" id="quadratic-c" placeholder="Enter c">
+        </div>
+
+        <div id="polynomial-inputs" class="inputs" style="display: none;">
+            <label for="polynomial-a">a:</label>
+            <input type="number" id="polynomial-a" placeholder="Enter a">
+
+            <label for="polynomial-b">b:</label>
+            <input type="number" id="polynomial-b" placeholder="Enter b">
+
+            <label for="polynomial-c">c:</label>
+            <input type="number" id="polynomial-c" placeholder="Enter c">
+
+            <label for="polynomial-d">d:</label>
+            <input type="number" id="polynomial-d" placeholder="Enter d">
+        </div>
+
+        <button onclick="solveEquation()">Solve</button>
+
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        document.getElementById("equation-type").addEventListener("change", function () {
+            const value = this.value;
+            document.querySelectorAll(".inputs").forEach(input => input.style.display = "none");
+            document.getElementById(`${value}-inputs`).style.display = "block";
+        });
+
+        function solveEquation() {
+            const type = document.getElementById("equation-type").value;
+            let output = "";
+
+            if (type === "linear") {
+                const a = parseFloat(document.getElementById("linear-a").value);
+                const b = parseFloat(document.getElementById("linear-b").value);
+                if (a === 0) {
+                    output = b === 0 ? "Infinite solutions" : "No solution";
+                } else {
+                    output = `x = ${-b / a}`;
+                }
+            } else if (type === "quadratic") {
+                const a = parseFloat(document.getElementById("quadratic-a").value);
+                const b = parseFloat(document.getElementById("quadratic-b").value);
+                const c = parseFloat(document.getElementById("quadratic-c").value);
+                const discriminant = b * b - 4 * a * c;
+                if (discriminant < 0) {
+                    output = "No real solutions";
+                } else if (discriminant === 0) {
+                    output = `x = ${-b / (2 * a)}`;
+                } else {
+                    const root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                    const root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                    output = `x₁ = ${root1}, x₂ = ${root2}`;
+                }
+            } else if (type === "polynomial") {
+                const a = parseFloat(document.getElementById("polynomial-a").value);
+                const b = parseFloat(document.getElementById("polynomial-b").value);
+                const c = parseFloat(document.getElementById("polynomial-c").value);
+                const d = parseFloat(document.getElementById("polynomial-d").value);
+                output = "For polynomial equations, use numerical methods or specialized solvers.";
+            }
+
+            document.getElementById("output").innerText = output;
+        }
+    </script>
+</body>
+</html>
